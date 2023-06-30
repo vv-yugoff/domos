@@ -1,0 +1,33 @@
+@media only screen and (max-width: 768px) {
+.main-content {
+    width: 430px;
+    height: 942px;
+
+    margin: 0;
+    padding: 20px 27px;
+
+    border: 5px solid #19356C;
+    background-color: #EDF3FF;
+}
+
+header {
+    width: 376px;
+
+    display: flex;
+    justify-content: center;
+}
+
+header img {
+    display: block;
+}
+
+.content {
+    width: 376px;
+}
+
+.content-logo img {
+
+}
+
+
+}
