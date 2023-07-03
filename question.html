@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="./phone.css">
+    <!-- <link rel="stylesheet" href="./desktop.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>Вопросы</title>
+
+</head>
+
+<body>
+
+    <header class="header-question">
+        <a href="./index.html" class="btn--back">
+            <img src="./images/arrow-left.svg" alt="Назад">
+        </a>
+        <h3 class="header-question--category" id="category">Категория...</h3>
+        <p class="header-question--numbers" id="number">Номер вопроса...</p>
+    </header>
+
+    <main>
+        <section class="content-question">
+            <div class="content-question--title" id="question-title">
+                <h3>Загружаем вопрос...</h3>
+            </div>
+            <div class="content-question--answers">
+                <ul class="content-question--answers-list" id="answers-list">
+                    <li>
+                        <label>
+                            <input type="radio" class="answer" name="answer">
+                            <span>Ответ...</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn--next">
+                <a href="./question.html" class="button" id="submit">Поехали!</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Copyright by ДоМос
+            <!-- Copyright by <img src="./images/logo.svg" alt="Логотип Домос"> -->
+        </p>
+    </footer>
+
+    <script src="./script.js"></script>
+
+</body>
+</html>

@@ -5,9 +5,11 @@
 html, body {
   height: 100vh;
   width: 100vw;
-  overflow: hidden; /* Чтобы отключить прокрутку */
+
   margin: 0;
   padding: 0;
+
+  overflow: hidden; /* Чтобы отключить прокрутку */
 }
 
 body {
@@ -36,6 +38,10 @@ body::after {
     align-items: center;
     padding: 20px 27px;
     height: 93px;
+}
+
+main {
+  padding: 20px 27px;
 }
 
 footer {
@@ -97,6 +103,44 @@ footer {
   text-decoration: none;
   text-align: center;
   margin-top: 30px;
+}
+
+
+
+/* Страница с вопросом и ответами */
+
+h3 {
+  font-weight: 400;
+}
+
+.header-question {
+  font-size: 20px;
+  line-height: 26px;
+
+  justify-content: space-between;
+}
+
+.header-question--numbers {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.content-question {
+  font-size: 20px;
+  line-height: 26px;
+}
+.content-question--title h3 {
+  
+}
+
+.content-question--answers {
+  margin-bottom: 50px;
+}
+.content-question--answers-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 400;
 }
 
 }
