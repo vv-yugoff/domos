@@ -105,42 +105,79 @@ footer {
   margin-top: 30px;
 }
 
+/* .content-button a:hover {
+  background-color: #19356C;
+} */
+
+/* .content-button a:focus {
+  background-color: green;
+} */
+
 
 
 /* Страница с вопросом и ответами */
 
 h3 {
-  font-weight: 400;
+  margin: 0;
+
+  font-weight: 600;
 }
 
-.header-question {
+.header-question {  
   font-size: 20px;
   line-height: 26px;
 
   justify-content: space-between;
 }
 
+.header-question--category {
+  font-size: 18px;
+}
+
 .header-question--numbers {
+  margin: 0;
+
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 600;
+}
+
+main {
+  padding-top: 0;
+  position: relative;
 }
 
 .content-question {
   font-size: 20px;
   line-height: 26px;
 }
+
 .content-question--title h3 {
-  
+  margin-bottom: 0;
+  hyphens: auto;
 }
 
-.content-question--answers {
-  margin-bottom: 50px;
-}
 .content-question--answers-list {
-  margin: 0;
+  margin-top: 20px;
+  
   padding: 0;
   list-style: none;
   font-weight: 400;
+}
+
+li {
+  margin-bottom: 24px;
+}
+
+.btn--next {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+
+  margin-right: 27px;
+}
+
+.content-button {
+  margin-top: 0;
 }
 
 }
