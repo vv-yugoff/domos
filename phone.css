@@ -164,8 +164,20 @@ main {
   font-weight: 400;
 }
 
+.content-question--answers-list label {
+  font-size: 16px;
+}
+
 li {
   margin-bottom: 24px;
+}
+
+.answer-input {
+  width: 100%;
+  min-height: 40px;
+
+  border-radius: 10px;
+  border-color: #19356C;
 }
 
 .btn--next {

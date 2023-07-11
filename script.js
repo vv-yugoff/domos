@@ -33,11 +33,17 @@ const questions = [
     },
     {
         number: 5,
-        category: '',
+        category: 'Обязательства',
         question: 'Есть ли у вас обязательства по посещению офиса?',
         answers: ['нужно быть в офисе каждый день и отчитываться о проделанной работе', 'нужно быть в офисе раз в неделю', 'необязательно посещать офис'],
         points: [2, 1, 0],
     },
+    {
+        number: 6,
+        category: 'Узнать честность агенства',
+        question: 'Давайте посчитаем, сколько суммарно вы отдаете за месяц своему агенству недвижимости',
+        answers: ['Среднее количество сделок в месяц:', 'Сколько из этих сделок вы обычно получаете от АН, в котором вы работает?', 'Средний чек по сделке:', 'Какой процент со сделки вы отдаете в свое агенство недвижимости?'],
+    }
     // {
     //     number: 3,
     //     category: 'Дежурства',
@@ -70,6 +76,8 @@ function clearPage() {
 }
 
 function showQuestion() {
+    let questionTemplate = '';
+
     const categoryTemplate = `<h3 class="header-question--category" id="category">%category%</h3>`;
     const category = categoryTemplate.replace('%category%', questions[questionIndex]['category']);
     categoryContainer.innerHTML = category;
@@ -86,13 +94,24 @@ function showQuestion() {
         console.log(index + 1, answerText);
         index++;
 
-        const questionTemplate = 
-            `<li>
-                <label>
-                    <input value="%index%" type="radio" class="answer" name="answer">
-                    <span>%answer%</span>
-                </label>
-            </li>`;
+        if (questionIndex !== questions.length - 1) {
+            questionTemplate = 
+                `<li>
+                    <label>
+                        <input value="%index%" type="radio" class="answer-radio" name="answer">
+                        <span>%answer%</span>
+                    </label>
+                </li>`;
+        } else {
+            questionTemplate =
+                `<li>
+                    <label>%answer%
+                        <input type="text" class="answer-input" name="answer">
+                    </label>
+                </li>`;
+        }
+
+        console.log(questionTemplate);
 
         const answerHTML = questionTemplate
             .replace('%answer%', answerText)
@@ -128,6 +147,9 @@ function checkAnswer() {
     console.log('Итог:', score);
 
     if (questionIndex !== questions.length - 1) {
+        console.log('a', questionIndex);
+        console.log('b', questions.length - 1);
+        
         console.log('Это не последний вопрос');
         questionIndex++;
         // Очистка
