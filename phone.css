@@ -127,6 +127,8 @@ h3 {
   font-size: 20px;
   line-height: 26px;
 
+  padding-bottom: 0;
+
   justify-content: space-between;
 }
 
@@ -142,7 +144,7 @@ h3 {
 }
 
 main {
-  padding-top: 0;
+  /* padding-top: 0; */
   position: relative;
 }
 
@@ -190,6 +192,11 @@ li {
 
 .content-button {
   margin-top: 0;
+}
+
+/* Страница с ответами */
+.hidden {
+  display: none;
 }
 
 }
