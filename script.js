@@ -61,8 +61,8 @@ const submitBtn = document.querySelector('#submit');
 let score = 0; // Количество очков
 let questionIndex = 1; // Номер вопроса
 
-showQuestion();
-submitBtn.addEventListener('click', checkAnswer);
+showQuestion(); // функция используется для отображения вопроса и вариантов ответов на странице
+submitBtn.addEventListener('click', checkAnswer); // проверяет выбран ли ответ пользователя и принимает соответствующие меры.
 
 function clearPage() {
     categoryContainer.innerHTML = '';
@@ -212,4 +212,28 @@ function showResults() {
         Спасибо, что ты нашел время, чтобы пройти этот тест, а теперь давай перейдем к анализу агенства, в котором ты работаешь.
     `
     // document.querySelector('section').textContent = 'Добрый день';
+}
+
+
+// Находим кнопку "Назад"
+const backButton = document.querySelector('.btn--back');
+
+// Добавляем обработчик события при клике на кнопку "Назад"
+backButton.addEventListener('click', goBack);
+
+// Функция для возвращения на предыдущий вопрос
+function goBack() {
+  // Уменьшаем значение questionIndex на 1
+  questionIndex--;
+
+  // Проверяем, чтобы questionIndex не стал меньше 1
+  if (questionIndex < 1) {
+    questionIndex = 1;
+  }
+
+  // Очищаем страницу
+  clearPage();
+
+  // Отображаем предыдущий вопрос
+  showQuestion();
 }
