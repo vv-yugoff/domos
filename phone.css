@@ -83,10 +83,13 @@ footer {
 /* КНОПКИ */
 
 .content-button {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 20px; */
+  position: absolute;
+  bottom: 0;
+  height: 135px;
 }
 
 .content-button a {

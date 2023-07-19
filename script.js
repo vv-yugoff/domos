@@ -9,9 +9,10 @@ const questions = [
             (Обучения техникам продаж, деловой этикет, язык тела в профессии и т.д.)`,
         answers: ['2-3 раза в месяц', '1 раз в месяц', 'реже одного раза в месяц', 'все знания добываю самостоятельно'],
         // points: [3, 2, 1, 0],
-        reviews: ['В твоем агенстве следят за уровнем знаний своих агентов и это похвально. Мы надеемся, что ообучения, которые ты проходишь помогают становиться настоящим профессионалом, а также развивают тебя как личность.',
-        'В твоем агестве проводятся ежемесячные ообучения и это отлично, но согласись, нет предела совершенству? Мы надеемся, что обучения влияют не только на твою профессиональную деятельность, но иразвивают тебя как личность.',
-        'Увы, твое агенство как-будто не очень заинтересовано в твоем профессиональном и личностном росте. Обучающие мероприятия проводятся исключительно редко, судя по твоему ответу.'
+        reviews: [
+            'В твоем агенстве следят за уровнем знаний своих агентов и это похвально. Мы надеемся, что ообучения, которые ты проходишь помогают становиться настоящим профессионалом, а также развивают тебя как личность.',
+            'В твоем агестве проводятся ежемесячные ообучения и это отлично, но согласись, нет предела совершенству? Мы надеемся, что обучения влияют не только на твою профессиональную деятельность, но иразвивают тебя как личность.',
+            'Увы, твое агенство как-будто не очень заинтересовано в твоем профессиональном и личностном росте. Обучающие мероприятия проводятся исключительно редко, судя по твоему ответу.'
         ],
     },
     {
@@ -20,9 +21,9 @@ const questions = [
         question: 'Есть ли в вашем агенстве обязательные дежурства?',
         answers: ['да', 'нет'],
         // points: [1, 0],
-        reviews: ['О, это замечательное чувство: отсутствие обязательных посещений офиса, теебе оно знакомо, как и нам в Домос. Ты волен делать то, что необхходимо именннно тебе для развития и совершения большего количества сделок и это прекрасно', 
-        '', 
-        ''
+        reviews: [
+            'Хоть у тебя и нет той свободы выбора, как у нас в Домос и ты вынужден оставаться на дежурства, но твое агенство недвижимости стоит похвалить. Ты получаешь новые заявки каждый раз, когда проводишь выходные в офисе и это оправдывает потраченное  время',
+            'О, это замечательное чувство: отсутствие обязательных посещений офиса, теебе оно знакомо, как и нам в Домос. Ты волен делать то, что необхходимо именннно тебе для развития и совершения большего количества сделок и это прекрасно', 
         ],
     },
     {
@@ -61,6 +62,9 @@ const headerContainer = document.querySelector('#question-title');
 const listContainer = document.querySelector('#answers-list');
 const submitBtn = document.querySelector('#submit');
 
+// Массив с рецензиями по ответам
+const reviewsList = [];
+
 // Переменные опросника
 let score = 0; // Количество очков
 let questionIndex = 1; // Номер вопроса
@@ -68,6 +72,9 @@ let questionIndex = 1; // Номер вопроса
 showQuestion(); // функция используется для отображения вопроса и вариантов ответов на странице
 submitBtn.addEventListener('click', checkAnswer); // проверяет выбран ли ответ пользователя и принимает соответствующие меры.
 
+/**
+ * Очищает страницу
+ */
 function clearPage() {
     categoryContainer.innerHTML = '';
     numberContainer.innerHTML = '';
@@ -75,6 +82,9 @@ function clearPage() {
     listContainer.innerHTML = '';
 }
 
+/**
+ * Отрисовка страницы с вопросом и варинтами ответов
+ */
 function showQuestion() {
     let questionTemplate = '';
 
@@ -136,7 +146,7 @@ function checkAnswer() {
     // console.log(textInputs);
     // console.log(textInputArray);
     
-    // Если ответ не вы  бран, то выходим из функции
+    // Если ответ не выбран, то выходим из функции
     if (!checkedRadio) {
         submitBtn.blur();
         alert('Выберите ответ');
@@ -153,14 +163,13 @@ function checkAnswer() {
         // Узнаем номер ответа пользователя
         const userAnswer = parseInt(checkedRadio.value);
         console.log('Номер ответа пользователя - ', userAnswer);
-        
+
         if (questions[questionIndex - 1]['reviews']) {
             // Запоминаем рецензии по ответу
-            const reviewsList = [];
             for ([index, review] of questions[questionIndex - 1]['reviews'].entries()) {
-                console.log(userAnswer);
-                console.log(index);
-                console.log(review);
+                console.log('Ответ пользователя ', userAnswer);
+                console.log('Индекс ревьюхи ', index);
+                console.log('Ревью' , review);
 
                 if (userAnswer === index + 1) {
                     console.log(document.querySelector('#answers-list'));
@@ -168,10 +177,10 @@ function checkAnswer() {
                     reviewsList.push(review);
                 }
             }
-            console.log(reviewsList);
         } else {
             console.log('Нет reviews');
         }
+        console.log(reviewsList);
     }
 
 
@@ -207,15 +216,15 @@ function checkAnswer() {
 
 function showResults() {
     console.log('РЕЗУЛЬТАТЫ');
-    console.log(document.querySelector('#category'));
+
     const header = document.querySelector('header');
     header.classList.add('hidden');
-    // document.querySelector('body').removeChild(header);
-    // document.querySelector('#category').textContent = 'Рецензия';
+
     document.querySelector('#question-title').textContent = `
         Спасибо, что ты нашел время, чтобы пройти этот тест, а теперь давай перейдем к анализу агенства, в котором ты работаешь.
-    `
-    // document.querySelector('section').textContent = 'Добрый день';
+    `;
+
+    
 }
 
 
