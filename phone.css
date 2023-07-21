@@ -3,13 +3,13 @@
 /* ОСНОВНЫЕ СВОЙСТВА */
 
 html, body {
-  height: 100vh;
+  height: 844px;
   width: 100vw;
 
   margin: 0;
   padding: 0;
 
-  overflow: hidden; /* Чтобы отключить прокрутку */
+  /* overflow: hidden; */
 }
 
 body {
@@ -31,43 +31,45 @@ body::after {
     pointer-events: none;
     z-index: -1;
   }
-
+  
   header {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px 27px;
     height: 93px;
-}
+  }
 
-main {
-  padding: 20px 27px;
-}
-
-footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+  main {
+    padding: 20px 27px;
+  }
+  
+  footer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 7px;
-
-    font-weight: 400; /* или normal */
+    text-align: center;
+  }
+  
+  footer p {
+    display: flex;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500; /* SemiBold */
     font-size: 12px;
-}
+  }
 
-/* СТИЛИ ДЛЯ КЛАССОВ */
-
-.content {
-  display: grid;
-  justify-content: center;
-  padding: 5px 27px;
-}
-
-.content-logo {
-  width: 100%;
-}
+  /* СТИЛИ ДЛЯ КЛАССОВ */
+  
+  .content {
+    display: grid;
+    justify-content: center;
+    padding: 5px 27px;
+  }
+  
+  .content-logo {
+    width: 100%;
+  }
 
 .content-text {
   padding-top: 10px;
@@ -82,15 +84,9 @@ footer {
 
 /* КНОПКИ */
 
-.content-button {
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px; */
-  position: absolute;
-  bottom: 0;
-  height: 135px;
-}
+/* .content-button, p {
+  margin-bottom: 10px;
+} */
 
 .content-button a {
   font-family: 'Open Sans', sans-serif;
@@ -193,9 +189,10 @@ li {
   margin-right: 27px;
 }
 
-.content-button {
+/* .content-button {
   margin-top: 0;
-}
+} */
+
 
 /* Страница с ответами */
 .hidden {
