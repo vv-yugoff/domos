@@ -301,3 +301,11 @@ function goBack() {
 //     showQuestion();
 // }
 
+
+// Убираем стиль absolute у footer и устанавливаем значение bottom
+// const footer = document.querySelector('footer');
+// footer.style.position = 'relative';
+// footer.style.bottom = '-45px';
+
+// Разрешаем прокрутку на странице
+// document.body.style.overflow = 'auto';
