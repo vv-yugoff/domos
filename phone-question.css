@@ -9,8 +9,7 @@
       margin: 0;
       padding: 0;
     
-      /* overflow: hidden;  */
-      /* Чтобы отключить прокрутку */
+      overflow: hidden; /* Чтобы отключить прокрутку */
     }
     
     body {
@@ -63,6 +62,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      margin-bottom: 5px;
+    
+      font-weight: 400; /* или normal */
+      font-size: 12px;
     }
     
     /* СТИЛИ ДЛЯ КЛАССОВ */
@@ -91,13 +98,13 @@
     /* КНОПКИ */
     
     .content-button {
-      display: flex;
+     /* display: flex;
       justify-content: center;
       align-items: center;
-      /* margin-top: 20px; */
-      /* position: absolute; */
-      /* bottom: 0; */
-      /* height: 135px; */
+      margin-top: 20px; */
+      position: absolute;
+      bottom: 0;
+      height: 135px;
     }
     
     .content-button a {
@@ -113,7 +120,6 @@
       font-size: 18px;  
       text-decoration: none;
       text-align: center;
-      /* margin-top: 30px; */
     }
     
     /* .content-button a:hover {
@@ -158,6 +164,7 @@
       /* padding-top: 0; */
       position: relative;
       padding-bottom: 45px;
+
     }
     
     .content-question {
@@ -168,6 +175,7 @@
     .content-question--title h3 {
       margin-bottom: 0;
       /* hyphens: auto; */
+
     }
     
     .content-question--answers-list {

@@ -9,8 +9,7 @@ html, body {
   margin: 0;
   padding: 0;
 
-  /* overflow: hidden;  */
-  /* Чтобы отключить прокрутку */
+  overflow: hidden; /* Чтобы отключить прокрутку */
 }
 
 body {
@@ -32,50 +31,43 @@ body::after {
     pointer-events: none;
     z-index: -1;
   }
-
+  
   header {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px 27px;
     height: 93px;
-}
+  }
 
 main {
   padding: 20px 27px;
 }
 
 footer {
-    left: 0;
-    bottom: 0;
-    width: 100%;
     /* display: flex;
     justify-content: center; */
     /* margin-bottom: 7px; */
     /* position: absolute; */
+    display: flex;
+    justify-content: center;
+    margin-bottom: 7px;
+
     font-weight: 400; /* или normal */
     font-size: 12px;
-    padding-bottom: 4px;
 }
 
-footer p {
-  padding-top: 3px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* СТИЛИ ДЛЯ КЛАССОВ */
-
-.content {
-  display: grid;
-  justify-content: center;
-  padding: 5px 27px;
-}
-
-.content-logo {
-  width: 100%;
-}
+  /* СТИЛИ ДЛЯ КЛАССОВ */
+  
+  .content {
+    display: grid;
+    justify-content: center;
+    padding: 5px 27px;
+  }
+  
+  .content-logo {
+    width: 100%;
+  }
 
 .content-text {
   padding-top: 10px;
@@ -91,13 +83,13 @@ footer p {
 /* КНОПКИ */
 
 .content-button {
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top: 20px; */
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* height: 135px; */
+  margin-top: 20px; */
+  position: absolute;
+  bottom: 0;
+  height: 135px;
 }
 
 .content-button a {
@@ -202,9 +194,10 @@ li {
   margin-right: 27px;
 }
 
-.content-button {
+/* .content-button {
   margin-top: 0;
-}
+} */
+
 
 /* Страница с ответами */
 .hidden {
