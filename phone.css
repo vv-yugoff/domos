@@ -52,7 +52,7 @@ footer {
     /* display: flex;
     justify-content: center; */
     /* margin-bottom: 7px; */
-    position: absolute;
+    /* position: absolute; */
     font-weight: 400; /* или normal */
     font-size: 12px;
     padding-bottom: 4px;
@@ -167,7 +167,7 @@ main {
 
 .content-question--title h3 {
   margin-bottom: 0;
-  hyphens: auto;
+  /* hyphens: auto; */
 }
 
 .content-question--answers-list {
