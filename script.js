@@ -168,11 +168,31 @@ function showQuestion() {
 }
 
 function checkAnswer() {
+
+      // Проверяем, выбран ли ответ
+  const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
+  const textInputs = listContainer.querySelectorAll('input[type="text"]');
+
+  if (!checkedRadio && textInputs.length === 0) {
+    submitBtn.blur();
+    alert('Выберите ответ');
+    return;
+  }
+
+  // Массив для значений из текстовых полей
+  const textInputArray = [];
+
+  if (textInputs.length !== 0) {
+    textInputs.forEach(item => {
+      textInputArray.push(item.value);
+    });
+  }
+
     // Массив для значений из текстовых полей
-    const textInputArray = [];
+    // const textInputArray = [];
 
     // Находим выбранную радиокнопку
-    const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
+    // const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
 
     // Если ответ не выбран, то выходим из функции
     if (!checkedRadio) {
