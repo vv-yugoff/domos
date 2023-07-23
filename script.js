@@ -255,6 +255,12 @@ function showResults() {
      footer.style.position = 'relative';
      footer.style.bottom = '-45px';
      document.body.style.overflow = 'auto';
+
+     const submitButton = document.getElementById('submit');
+
+        // Изменяем текст и ссылку элемента
+        submitButton.textContent = 'Перейти на сайт';
+        submitButton.href = 'http://domos.top';
 }
 
 
