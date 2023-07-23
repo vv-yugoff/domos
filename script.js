@@ -250,13 +250,18 @@ function showResults() {
         document.querySelector('#answers-list').appendChild(li);
     });
 
-     // Убираем стиль absolute у footer
-     const footer = document.querySelector('footer');
-     footer.style.position = 'relative';
-     footer.style.bottom = '-45px';
-     document.body.style.overflow = 'auto';
+        // Получаем элемент <main>
+        const mainElement = document.querySelector('main');
+        // Применяем стиль margin-bottom
+        mainElement.style.marginBottom = '64px';
 
-     const submitButton = document.getElementById('submit');
+        // Убираем стиль absolute у footer
+        const footer = document.querySelector('footer');
+        footer.style.position = 'relative';
+        footer.style.bottom = '17px';
+        document.body.style.overflow = 'auto';
+
+        const submitButton = document.getElementById('submit');
 
         // Изменяем текст и ссылку элемента
         submitButton.textContent = 'Перейти на сайт';
