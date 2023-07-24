@@ -119,6 +119,7 @@ function clearPage() {
     listContainer.innerHTML = '';
 }
 
+
 /**
  * Отрисовка страницы с вопросом и варинтами ответов
  */
@@ -154,7 +155,7 @@ function showQuestion() {
             questionTemplate =
                 `<li>
                     <label>%answer%
-                        <input type="text" class="answer-input" name="answer">
+                        <input type="number" class="answer-input" name="answer">
                     </label>
                 </li>`;
         }
@@ -188,12 +189,12 @@ function checkAnswer() {
     });
   }
 
-    // Массив для значений из текстовых полей
-    // const textInputArray = [];
-
+  // Массив для значений из текстовых полей
+  // const textInputArray = [];
+  
     // Находим выбранную радиокнопку
     // const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-
+    
     // Если ответ не выбран, то выходим из функции
     if (!checkedRadio) {
         submitBtn.blur();
@@ -248,7 +249,6 @@ function checkAnswer() {
         showResults();
     }
 }
-
 
 function showResults() {
     console.log('РЕЗУЛЬТАТЫ');
