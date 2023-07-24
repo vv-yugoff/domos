@@ -196,6 +196,8 @@ footer p {
     width: 100%;
     min-height: 40px;
   
+    font-size: 20px;
+
     border-radius: 10px;
     border-color: #19356C;
   }

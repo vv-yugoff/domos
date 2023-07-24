@@ -194,7 +194,12 @@
     .answer-input {
       width: 100%;
       min-height: 40px;
+
+      box-sizing: border-box;
+      font-size: 20px;
+      padding-left: 1rem;
     
+      color: #19356C;
       border-radius: 10px;
       border-color: #19356C;
     }

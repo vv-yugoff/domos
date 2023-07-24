@@ -169,48 +169,20 @@ function showQuestion() {
 }
 
 function checkAnswer() {
+    // Проверяем, выбран ли ответ
+    const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
+    const textInputs = listContainer.querySelectorAll('input[type="number"]');
 
-      // Проверяем, выбран ли ответ
-  const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-  const textInputs = listContainer.querySelectorAll('input[type="text"]');
+    // Массив для значений из текстовых полей
+    const textInputArray = [];
 
-  if (!checkedRadio && textInputs.length === 0) {
-    submitBtn.blur();
-    alert('Выберите ответ');
-    return;
-  }
-
-  // Массив для значений из текстовых полей
-  const textInputArray = [];
-
-  if (textInputs.length !== 0) {
-    textInputs.forEach(item => {
-      textInputArray.push(item.value);
-    });
-  }
-
-  // Массив для значений из текстовых полей
-  // const textInputArray = [];
-  
-    // Находим выбранную радиокнопку
-    // const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-    
-    // Если ответ не выбран, то выходим из функции
     if (!checkedRadio) {
         submitBtn.blur();
         alert('Выберите ответ');
-        // return
-    } else if (listContainer.querySelectorAll('input[type="text"]').length !== 0) {
-        console.log('ТОГДА НАДО ПРОВЕРЯТЬ ТЕКСТОВЫЕ ПОЛЯ');
-        listContainer.querySelectorAll('input[type="text"]').forEach(item => {
-            console.log(item.value);
-            textInputArray.push(item.value);
-        });
-        console.log(listContainer.querySelectorAll('input[type="text"]'));
-        console.log(textInputArray);
+        // return;
     } else {
-        // Узнаем номер ответа пользователя
         const userAnswer = parseInt(checkedRadio.value);
+        // Узнаем номер ответа пользователя
         console.log('Номер ответа пользователя - ', userAnswer);
 
         if (questions[questionIndex - 1]['reviews']) {
@@ -219,35 +191,64 @@ function checkAnswer() {
                 console.log('Ответ пользователя ', userAnswer);
                 console.log('Индекс ревьюхи ', index);
                 console.log('Ревью' , review);
-
+    
                 if (userAnswer === index + 1) {
                     console.log(document.querySelector('#answers-list'));
-                    const list = document.querySelector('#answers-list');
                     reviewsList.push(review);
                 }
             }
         } else {
             console.log('Нет reviews');
         }
-        console.log(reviewsList);
     }
 
-    if (questionIndex !== questions.length) {
+    if (textInputs.length !== 0) {
+        textInputs.forEach(item => textInputArray.push(item.value));
+    }
+
+    console.log(reviewsList);
+    
+    if (questionIndex <= questions.length) {
+        if (questionIndex === 6) {
+            console.log('ИНДЕКС 6 - СТРАНИЦА С РЕЗУЛЬТАТАМИ');
+            // Проверка на наличие значений в текстовых полях
+            console.log('СБОР ЗНАЧЕНИЙ В МАССИВ --> ', textInputArray);
+
+            calculateValue(textInputArray);
+            clearPage();
+            showResults();
+        }
+        
         console.log('НОМЕР ВОПРОСА: ', questionIndex);
         console.log('ВСЕГО ВОПРОСОВ: ', questions.length);
-        
         console.log('Это не последний вопрос');
+
         questionIndex++;
         // Очистка
         clearPage();
         // Отображение нового вопроса
         showQuestion();
-    } else {
-        console.log('Последний вопрос');
-        clearPage();
-        // Страница с результатами
-        showResults();
-    }
+    } 
+}
+
+/**
+ * Подсчет итогового значения по формуле
+ * @param {Array} textInputArray - Массив со значениями из полей type=number 
+ */
+function calculateValue(textInputArray) {
+    // Получение переменных для формулы
+    const numberOfDeals = parseInt(textInputArray[0]);
+    const checkPerDeal = parseInt(textInputArray[1]);
+    const percentFromDeal = parseInt(textInputArray[2]);
+
+    console.log(numberOfDeals);
+    console.log(checkPerDeal);
+    console.log(percentFromDeal);
+
+    const result = Math.round((numberOfDeals * checkPerDeal) * (percentFromDeal / 100));
+    console.log(result);
+ 
+    return result;
 }
 
 function showResults() {
@@ -261,31 +262,29 @@ function showResults() {
     `;
 
     reviewsList.forEach(review => {
-        // const li = `<li class='answer-input'>${review}</li>`;
-        // console.log(li);
         const li = document.createElement('li');
         li.classList.add('answer-input');
         li.textContent = review;
-        // document.querySelector('#answers-list').appendChild(li);
         document.querySelector('#answers-list').appendChild(li);
     });
 
-        // Получаем элемент <main>
-        const mainElement = document.querySelector('main');
-        // Применяем стиль margin-bottom
-        mainElement.style.marginBottom = '64px';
+    // Получаем элемент <main>
+    const mainElement = document.querySelector('main');
+    // Применяем стиль margin-bottom
+    mainElement.style.marginBottom = '64px';
 
-        // Убираем стиль absolute у footer
-        const footer = document.querySelector('footer');
-        footer.style.position = 'relative';
-        footer.style.bottom = '17px';
-        document.body.style.overflow = 'auto';
+    // Убираем стиль absolute у footer
+    const footer = document.querySelector('footer');
+    footer.style.position = 'relative';
+    footer.style.bottom = '17px';
+    document.body.style.overflow = 'auto';
 
-        const submitButton = document.getElementById('submit');
+    const submitButton = document.getElementById('submit');
 
-        // Изменяем текст и ссылку элемента
-        submitButton.textContent = 'Перейти на сайт';
-        submitButton.href = 'http://domos.top';
+    // Изменяем текст и ссылку элемента
+    submitButton.textContent = 'Перейти на сайт';
+    // submitBtn.addEventListener('click', () => submitButton.href = 'http://domos.top');
+    // submitButton.href = 'http://domos.top';
 }
 
 
@@ -297,46 +296,17 @@ backButton.addEventListener('click', goBack);
 
 // Функция для возвращения на предыдущий вопрос
 function goBack() {
-  // Уменьшаем значение questionIndex на 1
-  questionIndex--;
+    // Уменьшаем значение questionIndex на 1
+    questionIndex--;
 
-  reviewsList
-  // Проверяем, чтобы questionIndex не стал меньше 1
-  if (questionIndex < 1) {
-    questionIndex = 1;
-  }
+    // Проверяем, чтобы questionIndex не стал меньше 1
+    if (questionIndex < 1) {
+        questionIndex = 1;
+    }
 
-  // Очищаем страницу
-  clearPage();
+    // Очищаем страницу
+    clearPage();
 
-  // Отображаем предыдущий вопрос
-  showQuestion();
-
+    // Отображаем предыдущий вопрос
+    showQuestion();
 }
-
-// submitBtn.addEventListener('click', checkAnswer);
-
-// function checkAnswer() {
-//     const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-
-//     if (!checkedRadio) {
-//         submitBtn.blur();
-//         alert('Выберите ответ');
-//         return;
-//     }
-
-//     // Остальной код функции checkAnswer() остается без изменений
-
-//     questionIndex++;
-//     clearPage();
-//     showQuestion();
-// }
-
-
-// Убираем стиль absolute у footer и устанавливаем значение bottom
-// const footer = document.querySelector('footer');
-// footer.style.position = 'relative';
-// footer.style.bottom = '-45px';
-
-// Разрешаем прокрутку на странице
-// document.body.style.overflow = 'auto';
