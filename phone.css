@@ -195,8 +195,6 @@ footer p {
   .answer-input {
     width: 100%;
     min-height: 40px;
-  
-    font-size: 20px;
 
     border-radius: 10px;
     border-color: #19356C;
@@ -244,12 +242,12 @@ body {
 
 body::after {
     content: "";
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0; /* Вся ширина страницы */
-    border: 5px solid #19356C;
+    /* border: 5px solid #19356C; */
     pointer-events: none;
     z-index: -1;
   }
@@ -299,15 +297,15 @@ footer {
 
 /* КНОПКИ */
 
-.content-button {
-  /* display: flex;
+/* .content-button {
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; */
-  /* position: absolute;
+  margin-top: 20px;
+  position: absolute;
   bottom: 0;
-  height: 135px; */
-}
+  height: 135px;
+} */
 
 .content-button a {
   font-family: 'Open Sans', sans-serif;
