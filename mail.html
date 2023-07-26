@@ -1,6 +1,37 @@
-<form id="contact-form">
-    <input type="text" name="name" placeholder="Имя" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="tel" name="phone" placeholder="Телефон" required>
-    <button type="submit">Отправить</button>
-  </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="mail.css">
+  <title>Отправка формы</title>
+</head>
+<body>
+  
+  <div class="wrapper">
+    <div class="form">
+      <form action="#" id="form" class="form__body">
+        <h1 class="form__title">Отправка данных на почту</h1>
+        <div class="form__item">
+          <label form="formName" class="form__label">Имя*:</label>
+          <input id="formName" type="text" name="name" class="form__input _req">
+        </div>
+        <div class="form__item">
+          <label form="formEmail" class="form__label">Email*:</label>
+          <input id="formEmail" type="text" name="email" class="form__input _req _email">
+        </div>
+        <div class="form__item">
+          <label form="formName" class="form__label">Телефон*:</label>
+          <input id="formName" type="number" name="tel" class="form__input _req">
+        </div>
+
+        <button class="form__button">Отправить</button>
+
+      </form>
+    </div>
+  </div>
+
+  <script src>"mail.js"</script>
+
+</body>
+</html>
