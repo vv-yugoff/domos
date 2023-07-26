@@ -1,7 +1,0 @@
-.form__input:focus {
-    box-shadow: 0 0 15px rgb(0, 18, 120);
-}
-
-.form__input._error {
-    box-shadow: 0 0 15px red;
-}
