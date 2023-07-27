@@ -140,41 +140,43 @@ function showQuestion() {
     headerContainer.innerHTML = title;
 
     for ([index, answerText] of questions[questionIndex - 1]['answers'].entries()) {
+        console.log('Индекс вопроса ', questionIndex);
         console.log(index + 1, answerText);
         index++;
 
+        
         if (questionIndex - 1 !== questions.length - 1) {
             questionTemplate = 
-                `<li>
-                    <label>
-                        <input value="%index%" type="radio" class="answer-radio" name="answer">
-                        <span>%answer%</span>
-                    </label>
-                </li>`;
+            `<li>
+                <label>
+                    <input value="%index%" type="radio" class="answer-radio" name="answer">
+                    <span>%answer%</span>
+                </label>
+            </li>`;
         } else {
             questionTemplate =
-                `<li>
-                    <label>%answer%
-                        <input type="number" class="answer-input" name="answer">
-                    </label>
-                </li>`;
+            `<li>
+                <label>%answer%
+                    <input type="number" class="answer-input" name="answer">
+                </label>
+            </li>`;
         }
-
+        
         const answerHTML = questionTemplate
-            .replace('%answer%', answerText)
-            .replace('%index%', index);
-
+        .replace('%answer%', answerText)
+        .replace('%index%', index);
+        
         listContainer.innerHTML += answerHTML;
     }
 }
+// Массив для значений из текстовых полей
+const textInputArray = [];
 
 function checkAnswer() {
     // Проверяем, выбран ли ответ
     const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
     const textInputs = listContainer.querySelectorAll('input[type="number"]');
 
-    // Массив для значений из текстовых полей
-    const textInputArray = [];
 
     if (!checkedRadio) {
         submitBtn.blur();
@@ -184,6 +186,11 @@ function checkAnswer() {
         const userAnswer = parseInt(checkedRadio.value);
         // Узнаем номер ответа пользователя
         console.log('Номер ответа пользователя - ', userAnswer);
+
+        // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
+        if (questionIndex === 2 && userAnswer === 2) {
+            questionIndex++;
+        }
 
         if (questions[questionIndex - 1]['reviews']) {
             // Запоминаем рецензии по ответу
@@ -200,13 +207,12 @@ function checkAnswer() {
         } else {
             console.log('Нет reviews');
         }
+        console.log(reviewsList);
     }
 
     if (textInputs.length !== 0) {
         textInputs.forEach(item => textInputArray.push(item.value));
     }
-
-    console.log(reviewsList);
     
     if (questionIndex <= questions.length) {
         if (questionIndex === 6) {
@@ -217,17 +223,17 @@ function checkAnswer() {
             calculateValue(textInputArray);
             clearPage();
             showResults();
+        } else {
+            console.log('НОМЕР ВОПРОСА: ', questionIndex);
+            console.log('ВСЕГО ВОПРОСОВ: ', questions.length);
+            console.log('Это не последний вопрос');
+    
+            questionIndex++;
+            // Очистка
+            clearPage();
+            // Отображение нового вопроса
+            showQuestion();
         }
-        
-        console.log('НОМЕР ВОПРОСА: ', questionIndex);
-        console.log('ВСЕГО ВОПРОСОВ: ', questions.length);
-        console.log('Это не последний вопрос');
-
-        questionIndex++;
-        // Очистка
-        clearPage();
-        // Отображение нового вопроса
-        showQuestion();
     } 
 }
 
@@ -252,21 +258,34 @@ function calculateValue(textInputArray) {
 }
 
 function showResults() {
-    console.log('РЕЗУЛЬТАТЫ');
+    console.log('Попал на страницу с результатми');
 
     const header = document.querySelector('header');
     header.classList.add('hidden');
 
     document.querySelector('#question-title').textContent = `
-        Спасибо, что ты нашел время, чтобы пройти этот тест, а теперь давай перейдем к анализу агенства, в котором ты работаешь.
+        Спасибо, что ты нашел время пройти тест. Давай перейдем к анализу агенства, в котором ты работаешь.
     `;
-
+  
     reviewsList.forEach(review => {
+        console.log('review', review);
         const li = document.createElement('li');
         li.classList.add('answer-input');
         li.textContent = review;
+        li.style.paddingLeft = 0;
+        console.log(li);
         document.querySelector('#answers-list').appendChild(li);
     });
+    
+    const calculatedResult = calculateValue(textInputArray);
+    console.log(calculatedResult);
+    const result = document.createElement('li');
+    result.classList.add('answer-input');
+    result.textContent = `Результат ${calculatedResult}`;
+    result.style.paddingLeft = 0;
+    document.querySelector('#answers-list').appendChild(result);
+
+    console.log(document.querySelector('#answers-list'));
 
     // Получаем элемент <main>
     const mainElement = document.querySelector('main');
@@ -284,7 +303,7 @@ function showResults() {
     // Изменяем текст и ссылку элемента
     submitButton.textContent = 'Перейти на сайт';
     // submitBtn.addEventListener('click', () => submitButton.href = 'http://domos.top');
-    // submitButton.href = 'http://domos.top';
+    submitButton.href = 'http://domos.top';
 }
 
 
@@ -302,6 +321,10 @@ function goBack() {
     // Проверяем, чтобы questionIndex не стал меньше 1
     if (questionIndex < 1) {
         questionIndex = 1;
+    }
+
+    if (questionIndex === 3) {
+        questionIndex--;
     }
 
     // Очищаем страницу
