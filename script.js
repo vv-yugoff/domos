@@ -180,7 +180,7 @@ function checkAnswer() {
     const textInputs = listContainer.querySelectorAll('input[type="number"]');
     
     if (!checkedRadio && textInputs.length === 0) {
-        if (submitBtn.textContent = 'Перейти на сайт') return;
+        if (submitBtn.textContent === 'Перейти на сайт') return;
 
         alert('Выберите ответ');
         return;
