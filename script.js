@@ -277,9 +277,9 @@ function saveInputAnswer(fields) {
  */
 function calculateValue(textInputArray) {
     // Получение переменных для формулы
-    const numberOfDeals = parseInt(textInputArray[0]);
-    const checkPerDeal = parseInt(textInputArray[1]);
-    const percentFromDeal = parseInt(textInputArray[2]);
+    const numberOfDeals = parseInt(textInputArray[0].value);
+    const checkPerDeal = parseInt(textInputArray[1].value);
+    const percentFromDeal = parseInt(textInputArray[2].value);
 
     console.log(numberOfDeals);
     console.log(checkPerDeal);
@@ -310,15 +310,16 @@ function showResults() {
         li.classList.add('answer-input');
         li.textContent = review;
         li.style.paddingLeft = 0;
-        console.log(li);
         document.querySelector('#answers-list').appendChild(li);
     });
     
     const calculatedResult = calculateValue(textInputArray);
-    console.log(calculatedResult);
     const result = document.createElement('li');
     result.classList.add('answer-input');
-    result.textContent = `Результат ${calculatedResult}`;
+    result.innerHTML = `
+        <b>Результат:</b> ${calculatedResult} рублей ежемесячно вы отдаете своему агенству.<br>
+        В Домос вы будете отдавать только 10 000 рублей в месяц.
+    `;
     result.style.paddingLeft = 0;
     document.querySelector('#answers-list').appendChild(result);
 
@@ -366,4 +367,9 @@ function goBack() {
 
     // Отображаем предыдущий вопрос
     showQuestion();
+}
+
+// Ниже все для почты
+function sendEmail() {
+    // скрипт
 }
