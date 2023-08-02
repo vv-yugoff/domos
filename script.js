@@ -96,9 +96,10 @@ const submitBtn = document.querySelector('#submit');
 
 // Массив с рецензиями по ответам
 const reviewsList = [];
+// Массив для значений из текстовых полей
+const textInputArray = [];
 
 // Переменные опросника
-let score = 0; // Количество очков
 let questionIndex = 1; // Номер вопроса
 
 showQuestion(); // функция используется для отображения вопроса и вариантов ответов на странице
@@ -157,7 +158,7 @@ function showQuestion() {
             questionTemplate =
             `<li>
                 <label>%answer%
-                    <input type="number" class="answer-input" name="answer">
+                    <input type="number" class="answer-input" name="answer" required>
                 </label>
             </li>`;
         }
@@ -169,51 +170,47 @@ function showQuestion() {
         listContainer.innerHTML += answerHTML;
     }
 }
-// Массив для значений из текстовых полей
-const textInputArray = [];
 
+/**
+ * Проверка и запись ответа
+ */
 function checkAnswer() {
     // Проверяем, выбран ли ответ
     const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
     const textInputs = listContainer.querySelectorAll('input[type="number"]');
+    
+    if (!checkedRadio && textInputs.length === 0) {
+        if (submitBtn.textContent = 'Перейти на сайт') return;
 
-
-    if (!checkedRadio) {
-        submitBtn.blur();
         alert('Выберите ответ');
-        // return;
-    } else {
-        const userAnswer = parseInt(checkedRadio.value);
+        return;
+    }
+
+    if (!checkedRadio && textInputs.length !== 0) {
+        if (checkInputValues(textInputs)) {
+            alert('Заполните все поля');
+            return;
+        };
+    }
+
+    if (checkedRadio) {
         // Узнаем номер ответа пользователя
+        const userAnswer = parseInt(checkedRadio.value);
         console.log('Номер ответа пользователя - ', userAnswer);
-
-        // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
-        if (questionIndex === 2 && userAnswer === 2) {
-            questionIndex++;
-        }
-
-        if (questions[questionIndex - 1]['reviews']) {
-            // Запоминаем рецензии по ответу
-            for ([index, review] of questions[questionIndex - 1]['reviews'].entries()) {
-                console.log('Ответ пользователя ', userAnswer);
-                console.log('Индекс ревьюхи ', index);
-                console.log('Ревью' , review);
-    
-                if (userAnswer === index + 1) {
-                    console.log(document.querySelector('#answers-list'));
-                    reviewsList.push(review);
-                }
-            }
-        } else {
-            console.log('Нет reviews');
-        }
-        console.log(reviewsList);
+        saveReview(userAnswer);
     }
 
-    if (textInputs.length !== 0) {
-        textInputs.forEach(item => textInputArray.push(item.value));
+    if (textInputs.length !== 0)  {
+        saveInputAnswer(textInputs);
     }
     
+    displayChange(); 
+}
+
+/**
+ * Смена состония экрана (отрисовка различных "страниц")
+ */
+function displayChange() {
     if (questionIndex <= questions.length) {
         if (questionIndex === 6) {
             console.log('ИНДЕКС 6 - СТРАНИЦА С РЕЗУЛЬТАТАМИ');
@@ -234,7 +231,44 @@ function checkAnswer() {
             // Отображение нового вопроса
             showQuestion();
         }
-    } 
+    }
+}
+
+/**
+ * Сохранение рецензии по выбранному ответу
+ * @param {*} answer - выбранный пользователей ответ
+ */
+function saveReview(answer) {
+    // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
+    if (questionIndex === 2 && answer === 2) {
+        questionIndex++;
+    }
+
+    if (questions[questionIndex - 1]['reviews']) {
+        // Запоминаем рецензии по ответу
+        for ([index, review] of questions[questionIndex - 1]['reviews'].entries()) {
+            if (answer === index + 1) {
+                reviewsList.push(review);
+            }
+        }
+    }
+    console.log('Итоговые ревьюхи: ', reviewsList);
+}
+
+function checkInputValues(fields) {
+    flag = false;
+
+    fields.forEach(field => {
+        if (field.value === '') {
+            flag = true;
+        }
+    });
+
+    return flag;
+}
+
+function saveInputAnswer(fields) {
+    fields.forEach(field => textInputArray.push(field));
 }
 
 /**
@@ -257,6 +291,9 @@ function calculateValue(textInputArray) {
     return result;
 }
 
+/**
+ * Отрисовка страницы с результатами
+ */
 function showResults() {
     console.log('Попал на страницу с результатми');
 
@@ -298,12 +335,9 @@ function showResults() {
     footer.style.bottom = '17px';
     document.body.style.overflow = 'auto';
 
-    const submitButton = document.getElementById('submit');
-
     // Изменяем текст и ссылку элемента
-    submitButton.textContent = 'Перейти на сайт';
-    // submitBtn.addEventListener('click', () => submitButton.href = 'http://domos.top');
-    submitButton.href = 'http://domos.top';
+    submitBtn.textContent = 'Перейти на сайт';
+    submitBtn.addEventListener('click', () => submitBtn.href = 'http://domos.top');
 }
 
 
