@@ -438,5 +438,20 @@ footer p {
     .hidden {
       display: none;
     }
+
+    .margin { 
+      margin-bottom: 20px;
+    }
+
+    .feedback-inputs {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 20px;
+    }
+
+    .feedback-inputs input {
+      font-size: 16px;
+    }
     
     }

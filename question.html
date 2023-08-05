@@ -19,7 +19,7 @@
 <body>
 
     <header class="header-question">
-        <a href="#" class="btn--back">
+        <a href="#" id="back-btn">
             <img src="./images/arrow-left.svg" alt="Назад">
         </a>
         <h3 class="header-question--category" id="category">Категория...</h3>
@@ -39,7 +39,7 @@
     
     <footer>
             <div class="content-button">
-                <a href="#" id="submit">Ответить</a>
+                <input href="#" id="submit" value="Ответить">
             </div>
             <p>
                 Copyright by ДоМос
@@ -49,4 +49,38 @@
     <script src="./script.js"></script>
 
 </body>
+
+<template id="email-template">
+    <section class="content-email">
+        <h3 class="header-question--category margin">Получить результат опроса</h3>
+        <form action="send_mail.php" name="form" method="POST">
+            <div class="feedback-inputs">
+                <input 
+                    type="text" 
+                    placeholder="Ваше имя"
+                    class="answer-input"
+                    name="name"
+                    id="name"
+                    data-reg="^[А-ЯЁ][а-яё]*$" 
+                    required
+                    maxlength="20"
+                >
+                <input 
+                    type="text" 
+                    placeholder="Введите email"
+                    class="answer-input" 
+                    name="email"
+                    id="email"
+                    data-reg="^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$"
+                    required
+                    maxlength="50"
+                >
+            </div>
+            <div class="button">
+                <input type="submit" id="button" value="Отправить" />
+            </div>
+        </form>
+    </section>
+</template>
+
 </html>

@@ -93,6 +93,7 @@ const numberContainer = document.querySelector('#number');
 const headerContainer = document.querySelector('#question-title');
 const listContainer = document.querySelector('#answers-list');
 const submitBtn = document.querySelector('#submit');
+const backBtn = document.querySelector('#back-btn');
 
 // Массив с рецензиями по ответам
 const reviewsList = [];
@@ -103,12 +104,17 @@ const textInputArray = [];
 let questionIndex = 1; // Номер вопроса
 
 showQuestion(); // функция используется для отображения вопроса и вариантов ответов на странице
+
 submitBtn.addEventListener('click', checkAnswer); // проверяет выбран ли ответ пользователя и принимает соответствующие меры.
+
 document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Enter') {
         checkAnswer();
     }
 });
+
+// Добавляем обработчик события при клике на кнопку "Назад"
+backBtn.addEventListener('click', goBack);
 
 /**
  * Очищает страницу
@@ -118,6 +124,10 @@ function clearPage() {
     numberContainer.innerHTML = '';
     headerContainer.innerHTML = '';
     listContainer.innerHTML = '';
+
+    if (document.querySelector('.content-email')) {
+        document.querySelector('.content-email').innerHTML = '';
+    }
 }
 
 
@@ -125,7 +135,6 @@ function clearPage() {
  * Отрисовка страницы с вопросом и варинтами ответов
  */
 function showQuestion() {
-
     let questionTemplate = '';
 
     const categoryTemplate = `<h3 class="header-question--category" id="category">%category%</h3>`;
@@ -141,11 +150,8 @@ function showQuestion() {
     headerContainer.innerHTML = title;
 
     for ([index, answerText] of questions[questionIndex - 1]['answers'].entries()) {
-        console.log('Индекс вопроса ', questionIndex);
-        console.log(index + 1, answerText);
         index++;
 
-        
         if (questionIndex - 1 !== questions.length - 1) {
             questionTemplate = 
             `<li>
@@ -181,7 +187,6 @@ function checkAnswer() {
     
     if (!checkedRadio && textInputs.length === 0) {
         if (submitBtn.textContent === 'Перейти на сайт') return;
-
         alert('Выберите ответ');
         return;
     }
@@ -196,7 +201,6 @@ function checkAnswer() {
     if (checkedRadio) {
         // Узнаем номер ответа пользователя
         const userAnswer = parseInt(checkedRadio.value);
-        console.log('Номер ответа пользователя - ', userAnswer);
         saveReview(userAnswer);
     }
 
@@ -212,23 +216,23 @@ function checkAnswer() {
  */
 function displayChange() {
     if (questionIndex <= questions.length) {
-        if (questionIndex === 6) {
-            console.log('ИНДЕКС 6 - СТРАНИЦА С РЕЗУЛЬТАТАМИ');
-            // Проверка на наличие значений в текстовых полях
-            console.log('СБОР ЗНАЧЕНИЙ В МАССИВ --> ', textInputArray);
-
+        if (questionIndex === 5) {
+            questionIndex++;
+            clearPage();
+            showQuestion();
+            submitBtn.textContent = 'Получить результат';
+            const footer = document.querySelector('footer');
+            footer.style.position = 'relative';
+            footer.style.bottom = '-85px';
+            document.body.style.overflow = 'auto';
+            sendEmail();
+        } else if (questionIndex === 6) {
             calculateValue(textInputArray);
             clearPage();
             showResults();
         } else {
-            console.log('НОМЕР ВОПРОСА: ', questionIndex);
-            console.log('ВСЕГО ВОПРОСОВ: ', questions.length);
-            console.log('Это не последний вопрос');
-    
             questionIndex++;
-            // Очистка
             clearPage();
-            // Отображение нового вопроса
             showQuestion();
         }
     }
@@ -236,7 +240,7 @@ function displayChange() {
 
 /**
  * Сохранение рецензии по выбранному ответу
- * @param {*} answer - выбранный пользователей ответ
+ * @param {Number} answer - выбранный пользователей ответ
  */
 function saveReview(answer) {
     // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
@@ -252,7 +256,6 @@ function saveReview(answer) {
             }
         }
     }
-    console.log('Итоговые ревьюхи: ', reviewsList);
 }
 
 function checkInputValues(fields) {
@@ -281,13 +284,7 @@ function calculateValue(textInputArray) {
     const checkPerDeal = parseInt(textInputArray[1].value);
     const percentFromDeal = parseInt(textInputArray[2].value);
 
-    console.log(numberOfDeals);
-    console.log(checkPerDeal);
-    console.log(percentFromDeal);
-
-    const result = Math.round((numberOfDeals * checkPerDeal) * (percentFromDeal / 100));
-    console.log(result);
- 
+    const result = Math.round((numberOfDeals * checkPerDeal) * (percentFromDeal / 100)); 
     return result;
 }
 
@@ -317,13 +314,11 @@ function showResults() {
     const result = document.createElement('li');
     result.classList.add('answer-input');
     result.innerHTML = `
-        <b>Результат:</b> ${calculatedResult} рублей ежемесячно вы отдаете своему агенству.<br>
-        В Домос вы будете отдавать только 10 000 рублей в месяц.
+        <b>Результат:</b> ${calculatedResult} руб. ежемесячно вы отдаете своему агенству.<br>
+        В Домос вы будете отдавать только 10 000 руб. в месяц.
     `;
     result.style.paddingLeft = 0;
     document.querySelector('#answers-list').appendChild(result);
-
-    console.log(document.querySelector('#answers-list'));
 
     // Получаем элемент <main>
     const mainElement = document.querySelector('main');
@@ -341,13 +336,6 @@ function showResults() {
     submitBtn.addEventListener('click', () => submitBtn.href = 'http://domos.top');
 }
 
-
-// Находим кнопку "Назад"
-const backButton = document.querySelector('.btn--back');
-
-// Добавляем обработчик события при клике на кнопку "Назад"
-backButton.addEventListener('click', goBack);
-
 // Функция для возвращения на предыдущий вопрос
 function goBack() {
     // Уменьшаем значение questionIndex на 1
@@ -362,14 +350,70 @@ function goBack() {
         questionIndex--;
     }
 
-    // Очищаем страницу
     clearPage();
-
-    // Отображаем предыдущий вопрос
     showQuestion();
 }
 
 // Ниже все для почты
 function sendEmail() {
     // скрипт
+    document.querySelector('.content-button').remove();
+    console.log('-------------------->');
+
+    emailTemplate = document.querySelector('#email-template').content;
+    console.log(emailTemplate);
+
+    document.querySelector('main').appendChild(emailTemplate);
+
+    const form = document.forms["form"];
+    const formArr = Array.from(form);
+    const validFromArr = [];
+    const button = form.elements["button"];
+
+    // submitBtn.setAttribute('type', 'submit');
+
+    // form.appendChild(submitBtn);
+
+    formArr.forEach((element) => {
+        if (element.hasAttribute('data-reg')) {
+            element.setAttribute('is-valid', '0');
+            console.log(element);
+            validFromArr.push(element);
+        }
+    });
+
+    form.addEventListener('input', inputHandler);
+    form.addEventListener('submit', formCheck);
+    
+    console.log(form);
+    console.log(formArr);
+    console.log(validFromArr);
+    console.log(button);
+}
+
+function inputHandler({ target }) {
+    if (target.hasAttribute('data-reg')) {
+        inputCheck(target);
+    }
+}
+
+function inputCheck(element) {
+    const inputValue = element.value;
+    const inputReg = element.getAttribute('data-reg');
+    const reg = new RegExp(inputReg);
+
+    if (reg.test(inputValue)) {
+        element.setAttribute('is-valid', '1');
+        element.style.border = '2px solid rgb(0, 196, 0)';
+    } else {
+        element.setAttribute('is-valid', '0');
+        element.style.border = '2px solid rgb(255, 0, 0)';
+    }
+}
+
+function formCheck(event) {
+    event.preventDefault();
+    console.log('ANIME');
+
+    // Здесь закончили
 }
