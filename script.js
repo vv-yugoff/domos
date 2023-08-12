@@ -354,41 +354,45 @@ function goBack() {
     showQuestion();
 }
 
+const validFormArr = [];
+
+function getForm() {
+    const form = document.forms['form'];
+    const formArr = Array.from(form);
+    const button = form.elements['button'];
+
+    return [form, formArr, button];
+}
+
 // Ниже все для почты
 function sendEmail() {
-    // скрипт
     document.querySelector('.content-button').remove();
-    console.log('-------------------->');
-
+    
     emailTemplate = document.querySelector('#email-template').content;
     console.log(emailTemplate);
-
+    
     document.querySelector('main').appendChild(emailTemplate);
+    
+    const formData = getForm();
+    const form = formData[0];
+    const formArr = formData[1];
+    console.log(formData);
 
-    const form = document.forms["form"];
-    const formArr = Array.from(form);
-    const validFromArr = [];
-    const button = form.elements["button"];
 
-    // submitBtn.setAttribute('type', 'submit');
-
-    // form.appendChild(submitBtn);
 
     formArr.forEach((element) => {
         if (element.hasAttribute('data-reg')) {
             element.setAttribute('is-valid', '0');
             console.log(element);
-            validFromArr.push(element);
+            validFormArr.push(element);
         }
     });
+
 
     form.addEventListener('input', inputHandler);
     form.addEventListener('submit', formCheck);
     
-    console.log(form);
-    console.log(formArr);
-    console.log(validFromArr);
-    console.log(button);
+    return formData;
 }
 
 function inputHandler({ target }) {
@@ -413,7 +417,56 @@ function inputCheck(element) {
 
 function formCheck(event) {
     event.preventDefault();
-    console.log('ANIME');
+    const allValid = [];
 
-    // Здесь закончили
+    validFormArr.forEach((element) => {
+        allValid.push(element.getAttribute('is-valid'));
+    });
+
+    const isAllValid = allValid.reduce((acc, current) => {
+        return acc && current;
+    });
+
+    if (!Boolean(Number(isAllValid))) {
+        alert('Заполните поля правильно!');
+        return;
+    }
+    formSubmit();
+}
+
+async function formSubmit() {
+    const formData = getForm();
+    const form = formData[0];
+    const data = serializeForm(form);
+    console.log('great', data);
+    const response = await sendData(data);
+    console.log(response);
+
+    if (response.ok) {
+        let result = await response.json();
+        alert(result.message);
+        formReset(form);
+    } else {
+        alert('Код ошибки: ' + response.status);
+    }
+}
+
+function serializeForm(form) {
+    return new FormData(form);
+}
+
+async function sendData(data) {
+    return await fetch('send_mail.php', {
+        method: 'POST',
+        body: data,
+    });
+}
+
+function formReset(form) {
+    form.reset();
+
+    validFormArr.forEach((element) => {
+        element.setAttribute('is-valid', 0);
+        element.style.border = 'none';
+    });
 }
