@@ -139,7 +139,7 @@ function displayChange() {
             footer.style.position = 'relative';
             footer.style.bottom = '-85px';
             document.body.style.overflow = 'auto';
-            sendEmail();
+            // sendEmail();
         } else if (questionIndex === 6) {
             calculateValue(textInputArray);
             clearPage();
@@ -159,24 +159,28 @@ function displayChange() {
 function saveReview(answer) {
     let index = 0;
 
-    // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
-    if (questionIndex === 2 && answer === 2) {
-        questionIndex++;
-    }
-
     if (questions[questionIndex - 1]['reviews']) {
         // Запоминаем рецензии по ответу
         questions[questionIndex - 1]['reviews'].forEach(review => {
-            if (answer === index + 1) {
-                reviewsList.push(review);
+            if (answer === index) {
+
+                if (!(questionIndex === 2 && answer === 0)) {
+                    reviewsList.push(review);
+                }
+                
+                // Пропуск второго вопроса по теме "Дежурства", если выбран ответ "нет"
+                if (questionIndex === 2 && answer === 1) {
+                    questionIndex++;
+                }
             }
+
             index++;
         });
     }
 }
 
 function checkInputValues(fields) {
-    flag = false;
+    const flag = false;
 
     fields.forEach(field => {
         if (field.value === '') {
@@ -257,6 +261,7 @@ function showResults() {
 function goBack() {
     // Уменьшаем значение questionIndex на 1
     questionIndex--;
+    reviewsList.pop();
 
     // Проверяем, чтобы questionIndex не стал меньше 1
     if (questionIndex < 1) {
