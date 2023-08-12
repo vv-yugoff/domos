@@ -15,8 +15,8 @@
 
     $name = $_POST["name"];
     $email = $_POST["email"];
-	$phone = $_POST["phone"];
-    $message = $_POST["message"];
+	// $phone = $_POST["phone"];
+    // $message = $_POST["message"];
 	$email_template = "template_mail.html";
 
     $smtp_server = "smtp.yandex.ru"; // Адрес SMTP сервера
@@ -36,8 +36,8 @@
     $body = file_get_contents($email_template);
 	$body = str_replace('%name%', $name, $body);
 	$body = str_replace('%email%', $email, $body);
-	$body = str_replace('%phone%', $phone, $body);
-	$body = str_replace('%message%', $message, $body);
+	// $body = str_replace('%phone%', $phone, $body);
+	// $body = str_replace('%message%', $message, $body);
 
     $mail->addAddress("vv-yugov@yandex.ru");   // Здесь введите Email, куда отправлять
 	$mail->setFrom($email);
