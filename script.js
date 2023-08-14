@@ -38,7 +38,7 @@ function clearPage() {
     numberContainer.innerHTML = '';
     headerContainer.innerHTML = '';
     listContainer.innerHTML = '';
-
+    
     if (document.querySelector('.content-email')) {
         document.querySelector('.content-email').innerHTML = '';
     }
@@ -47,75 +47,77 @@ function clearPage() {
 
 /**
  * Отрисовка страницы с вопросом и варинтами ответов
- */
+*/
 function showQuestion() {
     let questionTemplate = '';
     let index = 0;
-
+    
+    
     const categoryTemplate = `<h3 class="header-question--category" id="category">%category%</h3>`;
     const category = categoryTemplate.replace('%category%', questions[questionIndex - 1]['category']);
     categoryContainer.innerHTML = category;
-
+    
     const numberTemplate = `<p class="header-question--numbers">%number% из 5</p>`;
     const number = numberTemplate.replace('%number%', questions[questionIndex - 1]['number']);
     numberContainer.innerHTML = number;
-
+    
     const headerTemplate = `<h3 class="header-question--category">%title%</h3>`;
     const title = headerTemplate.replace('%title%', questions[questionIndex - 1]['question']);
     headerContainer.innerHTML = title;
-
+    
+    
     questions[questionIndex - 1]['answers'].forEach(answerText => {
         if (questionIndex - 1 !== questions.length - 1) {
             questionTemplate = 
             `<li>
-                <label>
-                    <input value="%index%" type="radio" class="answer-radio" name="answer">
-                    <span>%answer%</span>
+            <label>
+                <input value="%index%" type="radio" class="answer-radio" name="answer">
+                <span>%answer%</span>
                 </label>
-            </li>`;
-        } else {
-            questionTemplate =
-            `<li>
+                </li>`;
+            } else {
+                questionTemplate =
+                `<li>
                 <label>%answer%
-                    <input type="number" class="answer-input" name="answer" required>
+                <input type="number" class="answer-input" name="answer" required>
                 </label>
-            </li>`;
+                </li>`;
+            }
+            
+            const answerHTML = questionTemplate
+            .replace('%answer%', answerText)
+            .replace('%index%', index);
+            
+            index++;
+            listContainer.innerHTML += answerHTML;
+        });
+    }
+    
+    /**
+     * Проверка и запись ответа
+    */
+   function checkAnswer() {
+       // Проверяем, выбран ли ответ
+       const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
+       const textInputs = listContainer.querySelectorAll('input[type="number"]');
+       
+       if (!checkedRadio && textInputs.length === 0) {
+           if (submitBtn.textContent === 'Перейти на сайт') return;
+           alert('Выберите ответ');
+           return;
         }
         
-        const answerHTML = questionTemplate
-        .replace('%answer%', answerText)
-        .replace('%index%', index);
+        if (!checkedRadio && textInputs.length !== 0) {
+            if (checkInputValues(textInputs)) {
+                alert('Заполните все поля');
+                return;
+            };
+        }
         
-        index++;
-        listContainer.innerHTML += answerHTML;
-    });
-}
-
-/**
- * Проверка и запись ответа
- */
-function checkAnswer() {
-    // Проверяем, выбран ли ответ
-    const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-    const textInputs = listContainer.querySelectorAll('input[type="number"]');
-    
-    if (!checkedRadio && textInputs.length === 0) {
-        if (submitBtn.textContent === 'Перейти на сайт') return;
-        alert('Выберите ответ');
-        return;
-    }
-
-    if (!checkedRadio && textInputs.length !== 0) {
-        if (checkInputValues(textInputs)) {
-            alert('Заполните все поля');
-            return;
-        };
-    }
-
-    if (checkedRadio) {
-        // Узнаем номер ответа пользователя
-        const userAnswer = parseInt(checkedRadio.value);
-        saveReview(userAnswer);
+        if (checkedRadio) {
+            // Узнаем номер ответа пользователя
+            const userAnswer = parseInt(checkedRadio.value);
+            saveReview(userAnswer);
     }
 
     if (textInputs.length !== 0)  {
@@ -134,12 +136,12 @@ function displayChange() {
             questionIndex++;
             clearPage();
             showQuestion();
-            submitBtn.textContent = 'Получить результат';
+            // submitBtn.textContent = 'Получить результат';
             const footer = document.querySelector('footer');
             footer.style.position = 'relative';
-            footer.style.bottom = '-85px';
+            footer.style.top = '80px';
             document.body.style.overflow = 'auto';
-            // sendEmail();
+            sendEmail();
         } else if (questionIndex === 6) {
             calculateValue(textInputArray);
             clearPage();
@@ -244,7 +246,7 @@ function showResults() {
     // Получаем элемент <main>
     const mainElement = document.querySelector('main');
     // Применяем стиль margin-bottom
-    mainElement.style.marginBottom = '64px';
+    // mainElement.style.marginBottom = '64px';
 
     // Убираем стиль absolute у footer
     const footer = document.querySelector('footer');
@@ -253,8 +255,9 @@ function showResults() {
     document.body.style.overflow = 'auto';
 
     // Изменяем текст и ссылку элемента
-    submitBtn.textContent = 'Перейти на сайт';
-    submitBtn.addEventListener('click', () => submitBtn.href = 'http://domos.top');
+    // submitBtn.textContent = 'Перейти на сайт';
+    // submitBtn.addEventListener('click', () => submitBtn.href = 'http://domos.top');
+    
 }
 
 // Функция для возвращения на предыдущий вопрос
@@ -288,7 +291,7 @@ function getForm() {
 
 // Ниже все для почты
 function sendEmail() {
-    document.querySelector('.content-button').remove();
+    // document.querySelector('.content-button').remove();
     
     const emailTemplate = document.querySelector('#email-template').content;
     

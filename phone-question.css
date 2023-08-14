@@ -116,7 +116,7 @@ footer p {
      text-decoration: none;
      text-align: center;
    }
-  
+
   footer p {
     font-family: 'Open Sans', sans-serif;
     font-weight: 500; /* SemiBold */
@@ -286,7 +286,7 @@ footer p {
       left: 0;
       bottom: 0;
       width: 100%;
-      margin-bottom: 5px;
+      margin-bottom: 0px;
     
       font-weight: 400; /* или normal */
       font-size: 12px;
@@ -326,7 +326,7 @@ footer p {
      height: 98px;
     }
     
-    .content-button a {
+    .content-button input {
       font-family: 'Open Sans', sans-serif;
       font-weight: 500; /* SemiBold */
       display: flex;
@@ -339,6 +339,9 @@ footer p {
       font-size: 18px;  
       text-decoration: none;
       text-align: center;
+      border: 0;
+      border-radius: 0px;
+      padding: 0px;
     }
     
     /* .content-button a:hover {
@@ -420,6 +423,7 @@ footer p {
       box-sizing: border-box;
       font-size: 20px;
       padding-left: 1rem;
+      margin-top: 5px;
     
       color: #19356C;
       border-radius: 10px;
