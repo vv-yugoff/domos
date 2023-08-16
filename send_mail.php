@@ -15,6 +15,9 @@
 
     $name = $_POST["name"];
     $email = $_POST["email"];
+
+    $reviewsList = $_POST['reviewsList'];
+
 	// $phone = $_POST["phone"];
     // $message = $_POST["message"];
 	$email_template = "template_mail.html";
@@ -36,8 +39,11 @@
     $body = file_get_contents($email_template);
 	$body = str_replace('%name%', $name, $body);
 	$body = str_replace('%email%', $email, $body);
+    $body = str_replace('%reviewsList%', implode('<br>', $reviewsList), $body);
 	// $body = str_replace('%phone%', $phone, $body);
 	// $body = str_replace('%message%', $message, $body);
+
+
 
     $mail->addAddress("vv-yugov@yandex.ru");   // Здесь введите Email, куда отправлять
 	$mail->setFrom($email);

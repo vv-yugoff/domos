@@ -49,6 +49,11 @@ function clearPage() {
  * Отрисовка страницы с вопросом и варинтами ответов
 */
 function showQuestion() {
+
+    // console.log(questions[questionIndex]);
+    // console.log(questions[questionIndex]['answers']);
+
+
     let questionTemplate = '';
     let index = 0;
     
@@ -90,6 +95,8 @@ function showQuestion() {
             
             index++;
             listContainer.innerHTML += answerHTML;
+
+            console.log(answerText);
         });
     }
     
@@ -178,6 +185,7 @@ function saveReview(answer) {
 
             index++;
         });
+
     }
 }
 
@@ -215,7 +223,7 @@ function calculateValue(textInputArray) {
  * Отрисовка страницы с результатами
  */
 function showResults() {
-    console.log('Попал на страницу с результатми');
+    console.log('Попал на страницу с результатами');
 
     const header = document.querySelector('header');
     header.classList.add('hidden');
@@ -224,15 +232,6 @@ function showResults() {
         Спасибо, что ты нашел время пройти тест. Давай перейдем к анализу агенства, в котором ты работаешь.
     `;
   
-    reviewsList.forEach(review => {
-        console.log('review', review);
-        const li = document.createElement('li');
-        li.classList.add('answer-input');
-        li.textContent = review;
-        li.style.paddingLeft = 0;
-        document.querySelector('#answers-list').appendChild(li);
-    });
-    
     const calculatedResult = calculateValue(textInputArray);
     const result = document.createElement('li');
     result.classList.add('answer-input');
@@ -242,6 +241,17 @@ function showResults() {
     `;
     result.style.paddingLeft = 0;
     document.querySelector('#answers-list').appendChild(result);
+
+
+    reviewsList.forEach(review => {
+        // console.log('review', review);
+        const li = document.createElement('li');
+        li.classList.add('answer-input');
+        li.textContent = review;
+        li.style.paddingLeft = 0;
+        document.querySelector('#answers-list').appendChild(li);
+    });
+    
 
     // Получаем элемент <main>
     const mainElement = document.querySelector('main');
@@ -289,9 +299,11 @@ function getForm() {
     return [form, formArr, button];
 }
 
+
+
 // Ниже все для почты
 function sendEmail() {
-    // document.querySelector('.content-button').remove();
+    document.querySelector('.content-button').remove();
     
     const emailTemplate = document.querySelector('#email-template').content;
     
@@ -304,7 +316,7 @@ function sendEmail() {
     formArr.forEach((element) => {
         if (element.hasAttribute('data-reg')) {
             element.setAttribute('is-valid', '0');
-            console.log(element);
+            // console.log(element);
             validFormArr.push(element);
         }
     });
@@ -356,17 +368,21 @@ async function formSubmit() {
     const formData = getForm();
     const form = formData[0];
     const data = serializeForm(form);
-    console.log('great', data);
+    data.append('reviewsList', JSON.stringify(reviewsList))
+    // console.log('great', data);
     const response = await sendData(data);
-    console.log(response);
+    // console.log(response);
 
     if (response.ok) {
         let result = await response.json();
         alert(result.message);
         formReset(form);
     } else {
-        alert('Код ошибки: ' + response.status);
+        clearPage();
+        showResults();
+        // alert('Код ошибки: ' + response.status);
     }
+
 }
 
 function serializeForm(form) {
