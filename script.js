@@ -49,14 +49,8 @@ function clearPage() {
  * Отрисовка страницы с вопросом и варинтами ответов
 */
 function showQuestion() {
-
-    // console.log(questions[questionIndex]);
-    // console.log(questions[questionIndex]['answers']);
-
-
     let questionTemplate = '';
     let index = 0;
-    
     
     const categoryTemplate = `<h3 class="header-question--category" id="category">%category%</h3>`;
     const category = categoryTemplate.replace('%category%', questions[questionIndex - 1]['category']);
@@ -74,64 +68,60 @@ function showQuestion() {
     questions[questionIndex - 1]['answers'].forEach(answerText => {
         if (questionIndex - 1 !== questions.length - 1) {
             questionTemplate = 
-            `<li>
-            <label>
-                <input value="%index%" type="radio" class="answer-radio" name="answer">
-                <span>%answer%</span>
-                </label>
-                </li>`;
-            } else {
-                questionTemplate =
                 `<li>
-                <label>%answer%
-                <input type="number" class="answer-input" name="answer" required>
-                </label>
+                    <label>
+                        <input value="%index%" type="radio" class="answer-radio" name="answer">
+                        <span>%answer%</span>
+                    </label>
                 </li>`;
-            }
+        } else {
+            questionTemplate =
+                `<li>
+                    <label>%answer%
+                        <input type="number" class="answer-input" name="answer" required>
+                    </label>
+                </li>`;
+        }
             
-            const answerHTML = questionTemplate
-            .replace('%answer%', answerText)
-            .replace('%index%', index);
-            
-            index++;
-            listContainer.innerHTML += answerHTML;
+        const answerHTML = questionTemplate
+        .replace('%answer%', answerText)
+        .replace('%index%', index);
+        
+        index++;
+        listContainer.innerHTML += answerHTML;
 
-            console.log(answerText);
-        });
+        console.log(answerText);
+    });
+}
+
+/**
+ * Проверка и запись ответа
+*/
+function checkAnswer() {
+    // Проверяем, выбран ли ответ
+    const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
+    const textInputs = listContainer.querySelectorAll('input[type="number"]');
+    
+    if (!checkedRadio && textInputs.length === 0) {
+        if (submitBtn.textContent === 'Перейти на сайт') return;
+        alert('Выберите ответ');
+        return;
     }
     
-    /**
-     * Проверка и запись ответа
-    */
-   function checkAnswer() {
-       // Проверяем, выбран ли ответ
-       const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
-       const textInputs = listContainer.querySelectorAll('input[type="number"]');
-       
-       if (!checkedRadio && textInputs.length === 0) {
-           if (submitBtn.textContent === 'Перейти на сайт') return;
-           alert('Выберите ответ');
-           return;
-        }
-        
-        if (!checkedRadio && textInputs.length !== 0) {
-            if (checkInputValues(textInputs)) {
-                alert('Заполните все поля');
-                return;
-            };
-        }
-        
-        if (checkedRadio) {
-            // Узнаем номер ответа пользователя
-            const userAnswer = parseInt(checkedRadio.value);
-            saveReview(userAnswer);
-    }
-
-    if (textInputs.length !== 0)  {
-        saveInputAnswer(textInputs);
+    if (!checkedRadio && textInputs.length !== 0) {
+        if (checkInputValues(textInputs)) {
+            alert('Заполните все поля');
+            return;
+        };
     }
     
-    displayChange(); 
+    if (checkedRadio) {
+        // Узнаем номер ответа пользователя
+        const userAnswer = parseInt(checkedRadio.value);
+        saveReview(userAnswer);
+    }
+    
+    displayChange();
 }
 
 /**
@@ -143,14 +133,15 @@ function displayChange() {
             questionIndex++;
             clearPage();
             showQuestion();
-            // submitBtn.textContent = 'Получить результат';
+            saveNumberFields();
+
             const footer = document.querySelector('footer');
             footer.style.position = 'relative';
             footer.style.top = '80px';
             document.body.style.overflow = 'auto';
+
             sendEmail();
         } else if (questionIndex === 6) {
-            calculateValue(textInputArray);
             clearPage();
             showResults();
         } else {
@@ -159,6 +150,14 @@ function displayChange() {
             showQuestion();
         }
     }
+}
+
+/**
+ * Функция сохраняющая поля типа Number для подсчета суммы в массив
+ */
+function saveNumberFields() {
+    const fields = document.querySelectorAll('input[type="number"]');
+    fields.forEach(field => textInputArray.push(field));
 }
 
 /**
@@ -201,15 +200,12 @@ function checkInputValues(fields) {
     return flag;
 }
 
-function saveInputAnswer(fields) {
-    fields.forEach(field => textInputArray.push(field));
-}
 
 /**
  * Подсчет итогового значения по формуле
  * @param {Array} textInputArray - Массив со значениями из полей type=number 
  */
-function calculateValue(textInputArray) {
+function calculateValue() {
     // Получение переменных для формулы
     const numberOfDeals = parseInt(textInputArray[0].value);
     const checkPerDeal = parseInt(textInputArray[1].value);
@@ -223,8 +219,6 @@ function calculateValue(textInputArray) {
  * Отрисовка страницы с результатами
  */
 function showResults() {
-    console.log('Попал на страницу с результатами');
-
     const header = document.querySelector('header');
     header.classList.add('hidden');
 
@@ -232,8 +226,9 @@ function showResults() {
         Спасибо, что ты нашел время пройти тест. Давай перейдем к анализу агенства, в котором ты работаешь.
     `;
   
-    const calculatedResult = calculateValue(textInputArray);
+    const calculatedResult = calculateValue();
     const result = document.createElement('li');
+
     result.classList.add('answer-input');
     result.innerHTML = `
         <b>Результат:</b> ${calculatedResult} руб. ежемесячно вы отдаете своему агенству.<br>
@@ -242,9 +237,7 @@ function showResults() {
     result.style.paddingLeft = 0;
     document.querySelector('#answers-list').appendChild(result);
 
-
     reviewsList.forEach(review => {
-        // console.log('review', review);
         const li = document.createElement('li');
         li.classList.add('answer-input');
         li.textContent = review;
@@ -252,11 +245,7 @@ function showResults() {
         document.querySelector('#answers-list').appendChild(li);
     });
     
-
-    // Получаем элемент <main>
     const mainElement = document.querySelector('main');
-    // Применяем стиль margin-bottom
-    // mainElement.style.marginBottom = '64px';
 
     // Убираем стиль absolute у footer
     const footer = document.querySelector('footer');
@@ -264,10 +253,10 @@ function showResults() {
     footer.style.bottom = '17px';
     document.body.style.overflow = 'auto';
 
-    // Изменяем текст и ссылку элемента
-    // submitBtn.textContent = 'Перейти на сайт';
-    // submitBtn.addEventListener('click', () => submitBtn.href = 'http://domos.top');
-    
+    const link = document.createElement('a');
+    link.textContent = 'Перейти на сайт';
+    link.setAttribute('href', 'http://domos.top');
+    mainElement.appendChild(link);
 }
 
 // Функция для возвращения на предыдущий вопрос
