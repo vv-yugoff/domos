@@ -1,4 +1,5 @@
 import { questions } from './data.js';
+import { footerChange, createLink } from './utils.js';
 
 
 // Находим элементы
@@ -17,31 +18,37 @@ const textInputArray = [];
 // Переменные опросника
 let questionIndex = 1; // Номер вопроса
 
-showQuestion(); // функция используется для отображения вопроса и вариантов ответов на странице
+// Функция используется для отображения вопроса и вариантов ответов на странице
+showQuestion(); 
 
-submitBtn.addEventListener('click', checkAnswer); // проверяет выбран ли ответ пользователя и принимает соответствующие меры.
+// Проверяет выбран ли ответ пользователя и принимает соответствующие меры.
+submitBtn.addEventListener('click', checkAnswer); 
 
+// Выбор ответа по нажатию на клавишу Enter
 document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Enter') {
         checkAnswer();
     }
 });
 
-// Добавляем обработчик события при клике на кнопку "Назад"
+// Обработчик события при клике на кнопку "Назад"
 backBtn.addEventListener('click', goBack);
+
 
 /**
  * Очищает страницу
  */
 function clearPage() {
+    const contentEmail = document.querySelector('.content-email');
+
+    if (contentEmail) {
+        contentEmail.innerHTML = '';
+    }
+
     categoryContainer.innerHTML = '';
     numberContainer.innerHTML = '';
     headerContainer.innerHTML = '';
     listContainer.innerHTML = '';
-    
-    if (document.querySelector('.content-email')) {
-        document.querySelector('.content-email').innerHTML = '';
-    }
 }
 
 
@@ -63,7 +70,6 @@ function showQuestion() {
     const headerTemplate = `<h3 class="header-question--category">%title%</h3>`;
     const title = headerTemplate.replace('%title%', questions[questionIndex - 1]['question']);
     headerContainer.innerHTML = title;
-    
     
     questions[questionIndex - 1]['answers'].forEach(answerText => {
         if (questionIndex - 1 !== questions.length - 1) {
@@ -89,21 +95,18 @@ function showQuestion() {
         
         index++;
         listContainer.innerHTML += answerHTML;
-
-        console.log(answerText);
     });
 }
+
 
 /**
  * Проверка и запись ответа
 */
 function checkAnswer() {
-    // Проверяем, выбран ли ответ
     const checkedRadio = listContainer.querySelector('input[type="radio"]:checked');
     const textInputs = listContainer.querySelectorAll('input[type="number"]');
     
     if (!checkedRadio && textInputs.length === 0) {
-        if (submitBtn.textContent === 'Перейти на сайт') return;
         alert('Выберите ответ');
         return;
     }
@@ -116,13 +119,14 @@ function checkAnswer() {
     }
     
     if (checkedRadio) {
-        // Узнаем номер ответа пользователя
+        // Узнаем номер ответа пользователя и сохраняем его
         const userAnswer = parseInt(checkedRadio.value);
         saveReview(userAnswer);
     }
     
     displayChange();
 }
+
 
 /**
  * Смена состония экрана (отрисовка различных "страниц")
@@ -133,13 +137,11 @@ function displayChange() {
             questionIndex++;
             clearPage();
             showQuestion();
-            saveNumberFields();
-
-            const footer = document.querySelector('footer');
-            footer.style.position = 'relative';
+            
+            const footer = footerChange();
             footer.style.top = '80px';
-            document.body.style.overflow = 'auto';
-
+            
+            saveNumberFields();
             sendEmail();
         } else if (questionIndex === 6) {
             clearPage();
@@ -152,6 +154,7 @@ function displayChange() {
     }
 }
 
+
 /**
  * Функция сохраняющая поля типа Number для подсчета суммы в массив
  */
@@ -159,6 +162,7 @@ function saveNumberFields() {
     const fields = document.querySelectorAll('input[type="number"]');
     fields.forEach(field => textInputArray.push(field));
 }
+
 
 /**
  * Сохранение рецензии по выбранному ответу
@@ -171,7 +175,6 @@ function saveReview(answer) {
         // Запоминаем рецензии по ответу
         questions[questionIndex - 1]['reviews'].forEach(review => {
             if (answer === index) {
-
                 if (!(questionIndex === 2 && answer === 0)) {
                     reviewsList.push(review);
                 }
@@ -181,14 +184,21 @@ function saveReview(answer) {
                     questionIndex++;
                 }
             }
-
             index++;
         });
 
     }
 }
 
+
+/**
+ * Функция, проверяющая, что все числовые поля заполнены
+ * @param {Object} fields -  Input (type=number) DOM Elements 
+ * @returns flag (true - есть пустые поля, false - все поля заполнены) 
+ */
 function checkInputValues(fields) {
+    console.log(typeof(fields));
+
     const flag = false;
 
     fields.forEach(field => {
@@ -215,20 +225,25 @@ function calculateValue() {
     return result;
 }
 
+
 /**
  * Отрисовка страницы с результатами
  */
 function showResults() {
     const header = document.querySelector('header');
+    // const mainBlock = document.querySelector('main');
+    const buttonLink = createLink();
+    const footer = footerChange();
+
+    const calculatedResult = calculateValue();
+    const result = document.createElement('li');
+    
     header.classList.add('hidden');
 
     document.querySelector('#question-title').textContent = `
         Спасибо, что ты нашел время пройти тест. Давай перейдем к анализу агенства, в котором ты работаешь.
     `;
   
-    const calculatedResult = calculateValue();
-    const result = document.createElement('li');
-
     result.classList.add('answer-input');
     result.innerHTML = `
         <b>Результат:</b> ${calculatedResult} руб. ежемесячно вы отдаете своему агенству.<br>
@@ -245,19 +260,10 @@ function showResults() {
         document.querySelector('#answers-list').appendChild(li);
     });
     
-    const mainElement = document.querySelector('main');
-
-    // Убираем стиль absolute у footer
-    const footer = document.querySelector('footer');
-    footer.style.position = 'relative';
     footer.style.bottom = '17px';
-    document.body.style.overflow = 'auto';
-
-    const link = document.createElement('a');
-    link.textContent = 'Перейти на сайт';
-    link.setAttribute('href', 'http://domos.top');
-    mainElement.appendChild(link);
+    footer.appendChild(buttonLink);
 }
+
 
 // Функция для возвращения на предыдущий вопрос
 function goBack() {
