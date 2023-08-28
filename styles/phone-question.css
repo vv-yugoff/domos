@@ -102,7 +102,7 @@ footer p {
     height: 98px;
    }
    
-   .link {
+   .content-button a {
      font-family: 'Open Sans', sans-serif;
      font-weight: 500; /* SemiBold */
      display: flex;
@@ -286,7 +286,7 @@ footer p {
       left: 0;
       bottom: 0;
       width: 100%;
-      margin-bottom: 0px;
+      margin-bottom: 5px;
     
       font-weight: 400; /* или normal */
       font-size: 12px;

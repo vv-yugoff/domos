@@ -14,6 +14,20 @@ export function createLink() {
     link.textContent = 'Перейти на сайт';
     link.classList.add('link');
     link.setAttribute('href', 'http://domos.top');
+    
+    link.style.font = "500";
+    link.style.display = "flex";
+    link.style.alignItems = "center";
+    link.style.justifyContent = "center";
+    link.style.backgroundColor = "#19356C";
+    link.style.color = "#EDF3FF";
+    link.style.width = "336px";
+    link.style.height = "67px";
+    link.style.fontSize = "18px";
+    link.style.textDecoration = "none";
+    link.style.textAlign = "center";
+
+    link.style.backgroundColor = "#19356C";
 
     div.appendChild(link);
     return div;
