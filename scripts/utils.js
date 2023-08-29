@@ -32,3 +32,17 @@ export function createLink() {
     div.appendChild(link);
     return div;
 }
+
+export function createInput() {
+    const div = document.createElement('div');
+    div.classList.add('content-button');
+
+    const input = document.createElement('input');
+    input.href = '#';
+    input.id = 'submit';
+    input.value = 'Ответить';
+    input.readOnly;
+
+    div.appendChild(input);
+    return div;
+}

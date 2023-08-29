@@ -1,5 +1,5 @@
 import { questions } from './data.js';
-import { footerChange, createLink } from './utils.js';
+import { footerChange, createLink, createInput } from './utils.js';
 
 
 // Находим элементы
@@ -27,6 +27,7 @@ submitBtn.addEventListener('click', checkAnswer);
 // Выбор ответа по нажатию на клавишу Enter
 document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Enter') {
+        if (questionIndex === 6) return;
         checkAnswer();
     }
 });
@@ -43,6 +44,12 @@ function clearPage() {
 
     if (contentEmail) {
         contentEmail.innerHTML = '';
+        const button = createInput();
+        if (document.querySelector('.content-button')) {
+            document.querySelector('footer').removeChild(document.querySelector('.content-button'));
+        }
+        document.querySelector('footer').appendChild(button);
+        button.addEventListener('click', checkAnswer); 
     }
 
     categoryContainer.innerHTML = '';
@@ -59,6 +66,12 @@ function showQuestion() {
     let questionTemplate = '';
     let index = 0;
     
+    if (questionIndex === 1) {
+        backBtn.querySelector('img').classList.add('hidden');
+    } else {
+        backBtn.querySelector('img').classList.remove('hidden');
+    }
+
     const categoryTemplate = `<h3 class="header-question--category" id="category">%category%</h3>`;
     const category = categoryTemplate.replace('%category%', questions[questionIndex - 1]['category']);
     categoryContainer.innerHTML = category;
@@ -363,19 +376,17 @@ async function formSubmit() {
     const formData = getForm();
     const form = formData[0];
     const data = serializeForm(form);
-    data.append('reviewsList', JSON.stringify(reviewsList))
-    // console.log('great', data);
+    data.append('reviewsList', JSON.stringify(reviewsList));
     const response = await sendData(data);
-    // console.log(response);
 
     if (response.ok) {
         let result = await response.json();
         alert(result.message);
         formReset(form);
     } else {
-        clearPage();
-        showResults();
-        // alert('Код ошибки: ' + response.status);
+        // clearPage();
+        // showResults();
+        alert('Код ошибки: ' + response.status);
     }
 
 }
@@ -385,7 +396,7 @@ function serializeForm(form) {
 }
 
 async function sendData(data) {
-    return await fetch('send_mail.php', {
+    return await fetch('../send_mail.php', {
         method: 'POST',
         body: data,
     });
