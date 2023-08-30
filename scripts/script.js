@@ -1,5 +1,6 @@
 import { questions } from './data.js';
 import { footerChange, createLink, createInput } from './utils.js';
+import { sendEmail } from "./mail.js";
 
 
 // Находим элементы
@@ -11,7 +12,7 @@ const submitBtn = document.querySelector('#submit');
 const backBtn = document.querySelector('#back-btn');
 
 // Массив с рецензиями по ответам
-const reviewsList = [];
+export const reviewsList = [];
 // Массив для значений из текстовых полей
 const textInputArray = [];
 
@@ -150,10 +151,7 @@ function displayChange() {
             questionIndex++;
             clearPage();
             showQuestion();
-            
-            const footer = footerChange();
-            footer.style.top = '80px';
-            
+            footerChange();
             saveNumberFields();
             sendEmail();
         } else if (questionIndex === 6) {
@@ -210,8 +208,6 @@ function saveReview(answer) {
  * @returns flag (true - есть пустые поля, false - все поля заполнены) 
  */
 function checkInputValues(fields) {
-    console.log(typeof(fields));
-
     const flag = false;
 
     fields.forEach(field => {
@@ -244,7 +240,6 @@ function calculateValue() {
  */
 function showResults() {
     const header = document.querySelector('header');
-    // const mainBlock = document.querySelector('main');
     const buttonLink = createLink();
     const footer = footerChange();
 
@@ -295,118 +290,4 @@ function goBack() {
 
     clearPage();
     showQuestion();
-}
-
-const validFormArr = [];
-
-function getForm() {
-    const form = document.forms['form'];
-    const formArr = Array.from(form);
-    const button = form.elements['button'];
-
-    return [form, formArr, button];
-}
-
-
-
-// Ниже все для почты
-function sendEmail() {
-    document.querySelector('.content-button').remove();
-    
-    const emailTemplate = document.querySelector('#email-template').content;
-    
-    document.querySelector('main').appendChild(emailTemplate);
-    
-    const formData = getForm();
-    const form = formData[0];
-    const formArr = formData[1];
-
-    formArr.forEach((element) => {
-        if (element.hasAttribute('data-reg')) {
-            element.setAttribute('is-valid', '0');
-            // console.log(element);
-            validFormArr.push(element);
-        }
-    });
-
-    form.addEventListener('input', inputHandler);
-    form.addEventListener('submit', formCheck);    
-}
-
-function inputHandler({ target }) {
-    if (target.hasAttribute('data-reg')) {
-        inputCheck(target);
-    }
-}
-
-function inputCheck(element) {
-    const inputValue = element.value;
-    const inputReg = element.getAttribute('data-reg');
-    const reg = new RegExp(inputReg);
-
-    if (reg.test(inputValue)) {
-        element.setAttribute('is-valid', '1');
-        element.style.border = '2px solid rgb(0, 196, 0)';
-    } else {
-        element.setAttribute('is-valid', '0');
-        element.style.border = '2px solid rgb(255, 0, 0)';
-    }
-}
-
-function formCheck(event) {
-    event.preventDefault();
-    const allValid = [];
-
-    validFormArr.forEach((element) => {
-        allValid.push(element.getAttribute('is-valid'));
-    });
-
-    const isAllValid = allValid.reduce((acc, current) => {
-        return acc && current;
-    });
-
-    if (!Boolean(Number(isAllValid))) {
-        alert('Заполните поля правильно!');
-        return;
-    }
-    formSubmit();
-}
-
-async function formSubmit() {
-    const formData = getForm();
-    const form = formData[0];
-    const data = serializeForm(form);
-    data.append('reviewsList', JSON.stringify(reviewsList));
-    const response = await sendData(data);
-
-    if (response.ok) {
-        let result = await response.json();
-        alert(result.message);
-        formReset(form);
-    } else {
-        // clearPage();
-        // showResults();
-        alert('Код ошибки: ' + response.status);
-    }
-
-}
-
-function serializeForm(form) {
-    return new FormData(form);
-}
-
-async function sendData(data) {
-    return await fetch('../send_mail.php', {
-        method: 'POST',
-        body: data,
-    });
-}
-
-function formReset(form) {
-    form.reset();
-
-    validFormArr.forEach((element) => {
-        element.setAttribute('is-valid', 0);
-        element.style.border = 'none';
-    });
 }

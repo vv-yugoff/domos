@@ -1,6 +1,5 @@
 export function footerChange() {
     const footer = document.querySelector('footer');
-    footer.style.position = 'relative';
     document.body.style.overflow = 'auto';
 
     return footer;
@@ -45,4 +44,12 @@ export function createInput() {
 
     div.appendChild(input);
     return div;
+}
+
+export function getForm() {
+    const form = document.forms['form'];
+    const formArr = Array.from(form);
+    const button = form.elements['button'];
+
+    return [form, formArr, button];
 }
